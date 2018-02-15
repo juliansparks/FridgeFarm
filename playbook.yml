@@ -1,0 +1,84 @@
+- hosts: all
+
+  vars:
+    prezto_repo: 'https://github.com/sorin-ionescu/prezto'
+    user_name: vagrant
+    prezto_config_script: 'mkpreztoconfig.sh'
+    cli_tools:
+      - git
+      - tree
+      - htop
+      - emacs-nox
+      - zsh
+
+  tasks:
+    - name: Updating & Upgrading
+      apt:
+        upgrade: dist
+        update_cache: yes
+        cache_valid_time: 3600
+      become: true
+
+    # - name: Installing Desktop Environment
+    #   apt:
+    #     name: ubuntu-desktop
+    #     update_cache: yes
+    #     cache_valid_time: 3600
+    #   become: true
+        
+    - name: Installing CLI tools
+      package: name="{{ item }}" state=present
+      with_items: "{{ cli_tools }}"
+      become: true
+
+    - name: Cloning Prezto
+      git:
+        repo: "{{ prezto_repo }}"
+        dest: ~/.zprezto/
+        track_submodules: yes
+        update: no
+      become_user: "{{ user_name }}"
+
+    - name: Making Prezto Config Links
+      file:
+        src: "~/.zprezto/runcoms/{{ item }}"
+        dest: "~/.{{ item }}"
+        state: link
+      with_items:
+        - "zlogin"
+        - "zlogout"
+        - "zpreztorc"
+        - "zprofile"
+        - "zshenv"
+        - "zshrc"
+      become_user: "{{ user_name }}"
+
+    - name: Setting user shell to zsh
+      user:
+        name: "{{ user_name }}"
+        shell: /bin/zsh
+      become: true
+
+    - name: Installing Python3.6 PPA
+      command: add-apt-repository ppa:jonathonf/python-3.6
+      become: yes
+
+    - name: Install Python 3.6
+      become: yes
+      apt:
+        name: python3.6
+        state: present
+        update_cache: yes
+      
+    - name: Install pip3
+      become: yes
+      apt:
+        name: python3-pip
+        state: present
+        update_cache: yes
+            
+    - name: Install 'virtualenv' package
+      pip:
+        name: virtualenv
+        executable: pip3
+                
