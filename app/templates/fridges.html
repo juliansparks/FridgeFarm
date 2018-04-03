@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Name: {{ fridge['name'] }}</h1>
+  <h3>fridge-ID: {{ fridge['fid'] }}</h3>
+  <h3>created: {{ fridge['created'] }}</h3>
+  <hr>
+  {% for item in items %}
+  <div><p><b>{{ item.name }}</b> UPC: {{ item.upc }} item-ID: [{{ item.iid}}] Desc: {{ item.description }} Exp: {{ item.experation }} Qt: {{ item.quantity }}</p></div>
+  {% endfor %}
+{% endblock %}
