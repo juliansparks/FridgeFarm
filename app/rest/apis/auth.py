@@ -36,6 +36,10 @@ class LoginResource(Resource):
 
 
 def token_required(func):
+    """
+    The :func:`@token_required<token_required>` decorator requires a valid
+    JSON web token to be passed in the header as 'X-API-KEY'.
+    """
 
     @wraps(func)
     def decorated(*args, **kwargs):
