@@ -8,13 +8,17 @@ import click
 import subprocess
 import shlex
 import os
+import sys
 
 from config import Config
 
 
 def cmd_run(cmd: str, *args, **kwargs):
     """ Used to run a commandline program """
-    return subprocess.run(shlex.split(cmd), *args, **kwargs)
+    completed_process = subprocess.run(shlex.split(cmd), *args, **kwargs)
+    if completed_process.returncode != 0:
+        sys.exit(completed_process.returncode)
+    return completed_process
 
 
 db = SQLAlchemy()
