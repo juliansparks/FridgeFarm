@@ -23,6 +23,6 @@
 ## Generating the documnetation
 
 Once you've follwed the install instructions, you can generate the documentation using:
-`flask docs build` to build the documentation
-`flask docs serve` to serve the documentation
+* `flask docs build` to build the documentation
+* `flask docs serve` to serve the documentation
 
