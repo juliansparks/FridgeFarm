@@ -12,7 +12,8 @@ import os
 from config import Config
 
 
-def run(cmd: str, *args, **kwargs):
+def cmd_run(cmd: str, *args, **kwargs):
+    """ Used to run a commandline program """
     return subprocess.run(shlex.split(cmd), *args, **kwargs)
 
 
@@ -26,6 +27,7 @@ toolbar = DebugToolbarExtension()
 
 
 def create_app(config_class=Config):
+    """ Flask factory to create an app """
     app = Flask(__name__)
     app.config.from_object(Config)
 
@@ -78,7 +80,8 @@ def create_app(config_class=Config):
         """
         click.echo(f'Serving HTML Documentation on {host}:{port}')
         click.echo('')
-        run(f'python -m http.server {port}',
+        cmd_run(
+            f'python -m http.server {port}',
             cwd=f'{os.getcwd()}/docs/build/html')
 
     @docs.command()
@@ -93,8 +96,8 @@ def create_app(config_class=Config):
         click.echo('Making Sphinx HTML Documentation')
         click.echo('')
         if apidoc:
-            run('sphinx-apidoc -f -o source/ ..', cwd=f'{os.getcwd()}/docs')
-        run('make html', cwd=f'{os.getcwd()}/docs')
+            cmd_run('sphinx-apidoc -f -o source/ ..', cwd=f'{os.getcwd()}/docs')
+        cmd_run('make html', cwd=f'{os.getcwd()}/docs')
 
     @app.cli.group(invoke_without_command=True)
     @click.pass_context
@@ -103,14 +106,14 @@ def create_app(config_class=Config):
         Run all tox test
         """
         if ctx.invoked_subcommand is None:
-            run('tox')
+            cmd_run('tox')
 
     @test.command()
     def lint():
         """
         Run autoformat and lint code (eyapf & flake8)
         """
-        run('tox -e yapf,lint')
+        cmd_run('tox -e yapf,lint')
 
     return app
 
