@@ -96,12 +96,21 @@ def create_app(config_class=Config):
             run('sphinx-apidoc -f -o source/ ..', cwd=f'{os.getcwd()}/docs')
         run('make html', cwd=f'{os.getcwd()}/docs')
 
-    @app.cli.command()
-    def test():
+    @app.cli.group(invoke_without_command=True)
+    @click.pass_context
+    def test(ctx):
         """
-        Run tox
+        Run all tox test
         """
-        run('tox')
+        if ctx.invoked_subcommand is None:
+            run('tox')
+
+    @test.command()
+    def lint():
+        """
+        Run autoformat and lint code (eyapf & flake8)
+        """
+        run('tox -e yapf,lint')
 
     return app
 
