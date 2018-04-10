@@ -7,4 +7,5 @@ def register_view(cls):
     cls.register(bp)
     return cls
 
-from app.main import routes
+
+from app.main import routes  # noqa: ignore=E401

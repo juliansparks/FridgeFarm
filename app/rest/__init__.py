@@ -18,4 +18,4 @@ api = Api(
     description='REST API',
     authorizations=authorizations)
 
-from app.rest import apis
+from app.rest import apis  # noqa: ignore=E401

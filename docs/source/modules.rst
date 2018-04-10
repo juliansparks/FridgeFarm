@@ -1,5 +1,5 @@
-fridgefarm
-==========
+CEN-4010
+========
 
 .. toctree::
    :maxdepth: 4
@@ -7,3 +7,4 @@ fridgefarm
    app
    config
    fapi
+   setup

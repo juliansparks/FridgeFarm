@@ -71,7 +71,7 @@ class Fridge(db.Model):
         db.session.add(item)
         db.session.commit()
         return item
-    
+
     def __contains__(self, item: 'Item') -> bool:
         return item in self.items
 

@@ -1,0 +1,4 @@
+tox==3.0.0
+pytest==3.5.0
+pytest-flask==0.10.0
+Flask-Testing==0.7.1
