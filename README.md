@@ -10,9 +10,7 @@
    * There is a `.env` file if you are using `autoenv` that will
      activate the virtual environment for you
 6. Upgrade pip `pip install --upgrade pip`
-7. Install dependencies 
-   * `pip install -r requirements/production.txt`
-   * `pip install -r requirements/testing.txt`
+7. Install dependencies `pip install -r requirements/development.txt`
 8. Set enviroment variables `export FLASK_APP=fapi.py`
 9. Run the development server `flask run --host='0.0.0.0'`
 
