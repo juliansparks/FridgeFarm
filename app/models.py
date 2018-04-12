@@ -105,7 +105,7 @@ class Item(db.Model):  # type: ignore
     def has_expiration(self) -> bool:
         return not self.experation == datetime.max
 
-    def update(self, dic):
+    def update(self, dic) -> None:
         """ Update fridge from values in dict """
         for key, value in dic.items():
             if getattr(self, key, None):
