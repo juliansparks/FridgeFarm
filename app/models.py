@@ -12,7 +12,7 @@ def load_user(id: str) -> 'User':
     return User.query.get(int(id))
 
 
-class User(UserMixin, db.Model):
+class User(UserMixin, db.Model):  # type: ignore
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
@@ -33,7 +33,7 @@ class User(UserMixin, db.Model):
         return f'<User {self.username}>'
 
 
-class Fridge(db.Model):
+class Fridge(db.Model):  # type: ignore
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     description = db.Column(db.String(140))
@@ -60,7 +60,7 @@ class Fridge(db.Model):
                  name: str,
                  description: str,
                  quantity: int = 1,
-                 expiration: datetime = datetime.max) -> None:
+                 expiration: datetime = datetime.max) -> 'Item':
         item = Item(
             name=name,
             description=description,
@@ -79,7 +79,7 @@ class Fridge(db.Model):
         return f'<Fridge {self.id}>'
 
 
-class Item(db.Model):
+class Item(db.Model):  # type: ignore
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     description = db.Column(db.String(140))
@@ -104,6 +104,13 @@ class Item(db.Model):
     @hybrid_property
     def has_expiration(self) -> bool:
         return not self.experation == datetime.max
+
+    def update(self, dic):
+        """ Update fridge from values in dict """
+        for key, value in dic.items():
+            if getattr(self, key, None):
+                setattr(self, key, value)
+        db.session.commit()
 
     def __repr__(self) -> str:
         return f'<Item {self.id}>'
