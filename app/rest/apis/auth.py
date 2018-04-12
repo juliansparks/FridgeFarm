@@ -25,7 +25,7 @@ class LoginResource(Resource):
                         auth.username,
                         'exp':
                         datetime.datetime.utcnow() +
-                        datetime.timedelta(minutes=5)
+                        datetime.timedelta(hours=2)
                     },
                     app.config['SECRET_KEY'])
                 return {'token': token.decode('UTF-8')}

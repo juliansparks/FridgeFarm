@@ -3,6 +3,8 @@ from app.rest.apis import classproperty, token_required
 from flask_restplus import Resource, fields, Namespace
 from app.models import Fridge, Item
 
+from app.typing import ViewResponse
+
 api = Namespace('fridges', description='Fridge related operations')
 
 
@@ -89,7 +91,7 @@ class ItemResource(Resource):
 
     @token_required
     @api.marshal_with(ApiModels.item)
-    def get(self, fridge_id: int, item_id: int) -> str:
+    def get(self, fridge_id: int, item_id: int) -> ViewResponse:
         fridge = Fridge.by_id(fridge_id)
         item = Item.by_id(item_id)
 
@@ -103,7 +105,7 @@ class ItemResource(Resource):
     @token_required
     @api.expect(ApiModels.item_payload, validate=True)
     @api.marshal_with(ApiModels.item)
-    def patch(self, fridge_id: int, item_id: int) -> str:
+    def patch(self, fridge_id: int, item_id: int) -> ViewResponse:
         fridge = Fridge.by_id(fridge_id)
         item = Item.by_id(item_id)
 
@@ -113,6 +115,6 @@ class ItemResource(Resource):
             }, 404
 
         data = request.json
-        print(data.items())
+        data.items()
         item.update(data)
         return item
