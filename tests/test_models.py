@@ -1,6 +1,6 @@
 from app import db
 from conftest import BasicTest
-from app.models import User, load_user
+from app.models import User, load_user, Item
 import pytest
 
 
@@ -87,7 +87,7 @@ class TestUser(DBTest):
 
     def test_repr__(self):
         """
-        Test :func:`app.models.__repr__`
+        Test :func:`app.models.User.__repr__`
         """
         user = self.add_new_user(username='bob123', email='bob@example.com')
         assert repr(user) == '<User bob123>'
@@ -99,3 +99,20 @@ class TestUser(DBTest):
         user = self.add_new_user()
 
         assert load_user(str(user.id)) is user
+
+
+class TestItem(DBTest):
+
+    @staticmethod
+    def add_new_item() -> Item:
+        item = Item(id=1, name='Apples', description='Red; Rounds', quantity=1)
+        db.session.add(item)
+        db.session.commit()
+        return item
+
+    def test_repr__(self):
+        """
+        Test :func:`app.models.Item.__repr__`
+        """
+        item = self.add_new_item()
+        assert repr(item) == '<Item 1>'
