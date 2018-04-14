@@ -3,25 +3,31 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from sqlalchemy.ext.hybrid import hybrid_property
+# from sqlalchemy.ext.declarative import declarative_base
 
 from typing import Type, TypeVar, Union
 
 
 @login.user_loader
 def load_user(id: str) -> 'User':
+    """ Required by flask_login to lookup users """
     return User.query.get(int(id))
 
 
-C = TypeVar('C')
-T = Union[db.Model, C]
+#: M is a subtype of CRUDMixin
+M = TypeVar('M', bound='CRUDMixin')
 
 
-class CRUDMixin:  # type: ignore
+class CRUDMixin:
     """ A mixin for adding CRUD methods to a model """
 
+    #: Add an 'id' Column and make it the primary key
+    id = db.Column(db.Integer, primary_key=True)
+
     @classmethod
-    def by_id(cls: Type[T], id: Union[int, str]) -> T:
-        return cls.query.filter_by(id=id).first_or_404()
+    def by_id(cls: Type[M], id: Union[int, str]) -> M:
+        """ Return the row that has this id """
+        return cls.query.filter_by(id=id).first_or_404()     # type: ignore
 
     def update(self, dic) -> None:
         """ Update Model from values in dict """
@@ -64,7 +70,7 @@ class User(UserMixin, db.Model):  # type: ignore
 
 
 class Fridge(db.Model, CRUDMixin):  # type: ignore
-    id = db.Column(db.Integer, primary_key=True)
+    # id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     description = db.Column(db.String(140))
     created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
@@ -95,7 +101,7 @@ class Fridge(db.Model, CRUDMixin):  # type: ignore
 
 
 class Item(db.Model, CRUDMixin):  # type: ignore
-    id = db.Column(db.Integer, primary_key=True)
+    # id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     description = db.Column(db.String(140))
     quantity = db.Column(db.Integer)
