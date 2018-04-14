@@ -4,12 +4,42 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from sqlalchemy.ext.hybrid import hybrid_property
 
-import typing
+from typing import Type, TypeVar, Union
 
 
 @login.user_loader
 def load_user(id: str) -> 'User':
     return User.query.get(int(id))
+
+
+C = TypeVar('C')
+T = Union[db.Model, C]
+
+
+class CRUDMixin:  # type: ignore
+    """ A mixin for adding CRUD methods to a model """
+
+    @classmethod
+    def by_id(cls: Type[T], id: Union[int, str]) -> T:
+        return cls.query.filter_by(id=id).first_or_404()
+
+    def update(self, dic) -> None:
+        """ Update Model from values in dict """
+        for key, value in dic.items():
+            if getattr(self, key, None):
+                setattr(self, key, value)
+        db.session.commit()
+
+    def save(self) -> None:
+        """ Save a Model """
+        if self.id is None:
+            db.session.add(self)
+        db.session.commit()
+
+    def remove(self) -> None:
+        """ Delete a Model """
+        db.session.delete(self)
+        db.session.commit()
 
 
 class User(UserMixin, db.Model):  # type: ignore
@@ -33,28 +63,13 @@ class User(UserMixin, db.Model):  # type: ignore
         return f'<User {self.username}>'
 
 
-class Fridge(db.Model):  # type: ignore
+class Fridge(db.Model, CRUDMixin):  # type: ignore
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     description = db.Column(db.String(140))
     created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     items = db.relationship('Item', backref='fridge', lazy='dynamic')
-
-    @staticmethod
-    def by_id(fridge_id: typing.Union[int, str]) -> 'Fridge':
-        return Fridge.query.filter_by(id=fridge_id).first_or_404()
-
-    def update(self, dic):
-        """ Update fridge from values in dict """
-        for key, value in dic.items():
-            if getattr(self, key, None):
-                setattr(self, key, value)
-        db.session.commit()
-
-    def remove(self) -> None:
-        db.session.delete(self)
-        db.session.commit()
 
     def add_item(self,
                  name: str,
@@ -79,7 +94,7 @@ class Fridge(db.Model):  # type: ignore
         return f'<Fridge {self.id}>'
 
 
-class Item(db.Model):  # type: ignore
+class Item(db.Model, CRUDMixin):  # type: ignore
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     description = db.Column(db.String(140))
@@ -89,14 +104,6 @@ class Item(db.Model):  # type: ignore
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     fridge_id = db.Column(db.Integer, db.ForeignKey('fridge.id'))
 
-    @staticmethod
-    def by_id(item_id: typing.Union[int, str]) -> 'Item':
-        return Item.query.filter_by(id=item_id).first_or_404()
-
-    def remove(self) -> None:
-        db.session.delete(self)
-        db.session.commit()
-
     @hybrid_property
     def expired(self) -> bool:
         return self.experation < datetime.today()
@@ -104,13 +111,6 @@ class Item(db.Model):  # type: ignore
     @hybrid_property
     def has_expiration(self) -> bool:
         return not self.experation == datetime.max
-
-    def update(self, dic) -> None:
-        """ Update fridge from values in dict """
-        for key, value in dic.items():
-            if getattr(self, key, None):
-                setattr(self, key, value)
-        db.session.commit()
 
     def __repr__(self) -> str:
         return f'<Item {self.id}>'
