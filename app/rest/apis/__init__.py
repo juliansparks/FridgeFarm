@@ -2,6 +2,7 @@ from flask import request, current_app as app
 from app.rest import api
 from functools import wraps
 import jwt
+from app.models import User
 
 
 def token_required(func):
@@ -23,6 +24,24 @@ def token_required(func):
         return func(*args, **kwargs)
 
     return decorated
+
+
+class BadToken(Exception):
+    pass
+
+
+def user_from_token():
+    if 'X-API-KEY' not in request.headers:
+        raise BadToken('Token missing.')
+
+    token = request.headers['X-API-KEY']
+
+    try:
+        data = jwt.decode(token, app.config['SECRET_KEY'])
+    except:
+        raise BadToken('Could not decode token.')
+
+    return User.get_by_username(data['username'])
 
 
 class classproperty(object):

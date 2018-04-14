@@ -1,5 +1,5 @@
 from flask import request
-from app.rest.apis import classproperty, token_required
+from app.rest.apis import classproperty, token_required, user_from_token
 from flask_restplus import Resource, fields, Namespace
 from app.models import Fridge, Item
 
@@ -65,6 +65,23 @@ class ApiModels:
 
 
 @api.doc(security='apikey')
+@api.route('/')
+class CreateFridgeResource(Resource):
+
+    @token_required
+    @api.expect(ApiModels.fridge_payload, validate=True)
+    @api.marshal_with(ApiModels.fridge)
+    def post(self) -> ViewResponse:
+        data = request.json
+        fridge = Fridge(
+            name=data['name'],
+            description=data['description'],
+            user_id=user_from_token().id)
+        fridge.save()
+        return fridge
+
+
+@api.doc(security='apikey')
 @api.route('/<int:fridge_id>')
 class FridgeResource(Resource):
 
@@ -80,7 +97,6 @@ class FridgeResource(Resource):
     def patch(self, fridge_id: int) -> str:
         fridge = Fridge.by_id(fridge_id)
         data = request.json
-        print(data.items())
         fridge.update(data)
         return fridge
 
