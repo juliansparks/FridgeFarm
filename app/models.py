@@ -27,7 +27,7 @@ class CRUDMixin:
     @classmethod
     def by_id(cls: Type[M], id: Union[int, str]) -> M:
         """ Return the row that has this id """
-        return cls.query.filter_by(id=id).first_or_404()     # type: ignore
+        return cls.query.filter_by(id=id).first_or_404()  # type: ignore
 
     def update(self, dic) -> None:
         """ Update Model from values in dict """
