@@ -21,6 +21,11 @@ def cmd_run(cmd: str, *args, **kwargs):
     return completed_process
 
 
+def project_path(path: str):
+    root = os.environ.get('PROJECT_ROOT') or os.getcwd()
+    return f'{root}/{path}'
+
+
 db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
@@ -86,7 +91,7 @@ def create_app(config_class=Config):
         click.echo('')
         cmd_run(
             f'python -m http.server {port}',
-            cwd=f'{os.getcwd()}/docs/build/html')
+            cwd=project_path('/docs/build/html'))
 
     @docs.command()
     @click.option(
@@ -101,7 +106,7 @@ def create_app(config_class=Config):
         click.echo('')
         if apidoc:
             cmd_run('sphinx-apidoc -f -o source/ ..', cwd=f'{os.getcwd()}/docs')
-        cmd_run('make html', cwd=f'{os.getcwd()}/docs')
+        cmd_run('make html', cwd=project_path('/docs'))
 
     @app.cli.group(invoke_without_command=True)
     @click.pass_context
