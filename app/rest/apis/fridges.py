@@ -72,6 +72,7 @@ class CreateFridgeResource(Resource):
     @api.expect(ApiModels.fridge_payload, validate=True)
     @api.marshal_with(ApiModels.fridge)
     def post(self) -> ViewResponse:
+        """ Create a new fridge """
         data = request.json
         fridge = Fridge(
             name=data['name'],
@@ -88,6 +89,7 @@ class FridgeResource(Resource):
     @token_required
     @api.marshal_with(ApiModels.fridge)
     def get(self, fridge_id: int) -> str:
+        """ Get a fridge by its id """
         fridge = Fridge.by_id(fridge_id)
         return fridge
 
@@ -95,9 +97,26 @@ class FridgeResource(Resource):
     @api.expect(ApiModels.fridge_payload, validate=True)
     @api.marshal_with(ApiModels.fridge)
     def patch(self, fridge_id: int) -> str:
+        """ Update a fridge """
         fridge = Fridge.by_id(fridge_id)
         data = request.json
         fridge.update(data)
+        return fridge
+
+    @token_required
+    @api.expect(ApiModels.item_payload, validate=True)
+    @api.marshal_with(ApiModels.item)
+    def post(self, fridge_id):
+        """ Create an item and add it to this fridge """
+        fridge = Fridge.by_id(fridge_id)
+        if fridge.user_id is not user_from_token().id:
+            return {'message': 'Unauthorized'}, 401
+        data = request.json
+        fridge.add_item(
+            name=data['name'],
+            description=data['description'],
+            quantity=data['quantity'],
+            expiration=data['expiration'])
         return fridge
 
 
@@ -108,6 +127,7 @@ class ItemResource(Resource):
     @token_required
     @api.marshal_with(ApiModels.item)
     def get(self, fridge_id: int, item_id: int) -> ViewResponse:
+        """ Get an item by id """
         fridge = Fridge.by_id(fridge_id)
         item = Item.by_id(item_id)
 
@@ -122,6 +142,7 @@ class ItemResource(Resource):
     @api.expect(ApiModels.item_payload, validate=True)
     @api.marshal_with(ApiModels.item)
     def patch(self, fridge_id: int, item_id: int) -> ViewResponse:
+        """ Update an item by it's id """
         fridge = Fridge.by_id(fridge_id)
         item = Item.by_id(item_id)
 

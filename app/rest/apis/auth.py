@@ -13,6 +13,7 @@ class LoginResource(Resource):
     """ Endpoint to login and get api token """
 
     def get(self):
+        """ Login in & get a json web token """
         auth = request.authorization
 
         if auth:
