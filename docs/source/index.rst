@@ -13,10 +13,14 @@ Welcome to FridgeFarm's documentation!
    install
    gendocs
    modules
+   coverage_html/index.html#://
+
 
 .. qrefflask:: app:create_app()
    :undoc-static:
-	     
+
+
+
 ..
    .. autoflask:: app:create_app()
       :undoc-static:

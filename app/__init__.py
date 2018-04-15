@@ -106,6 +106,7 @@ def create_app(config_class=Config):
         click.echo('')
         if apidoc:
             cmd_run('sphinx-apidoc -f -o source/ ..', cwd=f'{os.getcwd()}/docs')
+        cmd_run('make coverage', cwd=project_path('/docs'))
         cmd_run('make html', cwd=project_path('/docs'))
 
     @app.cli.group(invoke_without_command=True)
