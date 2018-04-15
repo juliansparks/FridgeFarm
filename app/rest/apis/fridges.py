@@ -83,6 +83,17 @@ class CreateFridgeResource(Resource):
 
 
 @api.doc(security='apikey')
+@api.route('/mine')
+class CurrentUsersFridgeResource(Resource):
+
+    @token_required
+    @api.marshal_with(ApiModels.fridge)
+    def get(self) -> ViewResponse:
+        """ Get a list of this user's fridges """
+        return Fridge.owned_by(user_from_token())
+
+
+@api.doc(security='apikey')
 @api.route('/<int:fridge_id>')
 class FridgeResource(Resource):
 

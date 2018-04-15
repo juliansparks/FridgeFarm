@@ -54,8 +54,8 @@ class classproperty(object):
         return self.fget(owner_cls)
 
 
-from .fridges import api as fridge_api
-api.add_namespace(fridge_api)
-
 from .auth import api as auth_api
 api.add_namespace(auth_api)
+
+from .fridges import api as fridge_api
+api.add_namespace(fridge_api)

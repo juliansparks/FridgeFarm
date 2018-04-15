@@ -5,7 +5,7 @@ from datetime import datetime
 from sqlalchemy.ext.hybrid import hybrid_property
 # from sqlalchemy.ext.declarative import declarative_base
 
-from typing import Type, TypeVar, Union
+from typing import Type, TypeVar, Union, List
 
 
 @login.user_loader
@@ -76,6 +76,10 @@ class Fridge(db.Model, CRUDMixin):  # type: ignore
     created = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     items = db.relationship('Item', backref='fridge', lazy='dynamic')
+
+    @staticmethod
+    def owned_by(user: User) -> List['Fridge']:
+        return Fridge.query.filter_by(user_id=user.id).all()
 
     def add_item(self,
                  name: str,
