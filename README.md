@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Web App & REST API
 
 ## Running for development
@@ -23,4 +24,20 @@
 Once you've follwed the install instructions, you can generate the documentation using:
 * `flask docs build` to build the documentation
 * `flask docs serve` to serve the documentation
+=======
+# CEN-4010
+
+## Development VM
+
+### Documentation
+[Vagrant Documentation](https://www.vagrantup.com/docs/)
+[Ansible Documentation](http://docs.ansible.com/ansible/latest/index.html)
+
+### Interacting with Vagrant
+* Start VM: `vagrant up`
+* Get a terminal in the VM: `vagrant ssh`
+* Stop VM: `vagrant halt`
+* Delete VM: `vagrant destory`
+* Force re-provisioning; `vagrant provision` (This will run the ansible playbook)
+>>>>>>> 1390f54443255a67d13c3a2c3b425cc29446d552
 
