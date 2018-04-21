@@ -1,0 +1,7 @@
+[
+  "tests/test_models.py::TestUser::test_existing_username",
+  "tests/test_models.py::TestUser::test_get_by_username",
+  "tests/test_models.py::TestUser::test_load_user",
+  "tests/test_models.py::TestUser::test_password",
+  "tests/test_models.py::TestUser::test_repr__"
+]
