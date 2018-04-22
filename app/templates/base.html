@@ -32,7 +32,7 @@
                 </ul>
 		{% if not current_user.is_anonymous %}
 		    <ul class="nav navbar-nav">
-			<a class="navbar-brand" href="{{ url_for('main.FridgeView:all_fridges') }}">Inventories</a>
+			<li><a class="inventorylabel" href="{{ url_for('main.FridgeView:all_fridges') }}">Inventories</a></li>
 		    </ul>
 		{% endif %}
 		<ul class="nav navbar-nav">

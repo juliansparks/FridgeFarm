@@ -13,7 +13,7 @@
 }
 
 .navbar-color {
-  background-color: #bee9ff;
+  background-color: #a5ddf9;
   border-color: #c5fcff;
 }
 
@@ -35,6 +35,19 @@
   color: #fff;
   font-family: 'Open Sans';
   font-size: 20px;
+}
+
+.inventorylabel {
+  color: #fff;
+  font-family: 'Open Sans';
+  font-size: 20px;
+padding-top: 25px;
+padding-bottom: 25px;
+}
+
+.navbar-nav > a {
+padding-top: 25px;
+padding-bottom: 25px;
 }
 
 .header {
@@ -98,4 +111,72 @@ p{
 font-family: 'Open Sans';
 font-size: 16px;
 color: #6abbe2;
+}
+
+th {
+text-align: left;
+  font-family: 'Open Sans';
+  font-weight: 100;
+  color: #31a0d6;
+  
+}
+
+td {
+  color: #1e86b8;
+  font-family: 'Open Sans';
+  font-weight: 100;
+}
+
+.table-striped > tbody > tr:nth-of-type(2n+1) {
+  background-color: #b8f0ff;
+}
+
+.table-striped > tbody > tr:nth-of-type(2n) {
+  background-color: #e7faff;
+}
+
+.btn-success {
+
+    color: #1e86b8;
+    background-color: transparent;
+    border-color: transparent;
+
+}
+
+.btn-success.focus, .btn-success:focus {
+
+    color: #1e86b8;
+    background-color: transparent;
+    border-color: transparent;
+
+}
+
+.btn-danger.focus, .btn-danger:focus {
+
+    color: #1e86b8;
+    background-color: transparent;
+    border-color: transparent;
+
+}
+
+.btn-danger {
+
+    color: #1e86b8;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: middle;
+    border-top: 1px solid #ddd;
+
+}
+
+.btn-primary {
+    color: #1e86b8;
+    background-color: transparent;
+    border-color: transparent;
 }
