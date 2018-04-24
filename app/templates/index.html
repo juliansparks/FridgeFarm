@@ -1,5 +1,9 @@
 {% extends "base.html" %}
+{% block head %}
+{{super()}}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='stylesheets/style.css') }}">
+{% endblock %}
 
 {% block app_content %}
-<h1>Hi, {{ current_user.username }}!</h1>
+<h1 class="header">Hi, {{ current_user.username }}!</h1>
 {% endblock %}
