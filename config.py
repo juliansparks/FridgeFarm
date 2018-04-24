@@ -53,11 +53,14 @@ class DevConfig(Config):
     DEBUG = True
 
 
-class TestConfig(DevConfig):
+class TestConfig(Config):
     """ Config for use during testing """
 
     #: Set debug mode
-    DEBUG = True
+    DEBUG = False
+
+    #: disable CSRF token for WTF forms
+    WTF_CSRF_ENABLED = False
 
     #: Set testing mode
     TESTING = True

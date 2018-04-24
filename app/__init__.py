@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
 from flask_debugtoolbar import DebugToolbarExtension
+from urllib.parse import urlparse
 import click
 import subprocess
 import shlex
@@ -38,9 +39,19 @@ toolbar = DebugToolbarExtension()
 def create_app(config_class=Config):
     """ Flask factory to create an app """
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object(config_class)
 
     db.init_app(app)
+
+    #: if testing recreate the database
+    if app.config['TESTING']:
+        uri = urlparse(app.config['SQLALCHEMY_DATABASE_URI'])
+        if uri.path and os.path.exists(uri.path):
+            os.unlink(uri.path)
+
+        with app.app_context():
+            db.create_all()
+
     migrate.init_app(app, db)
     login.init_app(app)
     bootstrap.init_app(app)
